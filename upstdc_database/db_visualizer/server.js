@@ -1,4 +1,19 @@
-const express = require('express');
+/**
+ * PUBLIC_INTERFACE
+ * server.js - Lightweight database viewer API and static UI server.
+ * - Uses Express (require('express')) with CORS and iframe allowances.
+ * - Supports PostgreSQL, MySQL, SQLite, and MongoDB via adapters.
+ * - Listens on process.env.PORT (default 3000). Use --host 0.0.0.0 for container exposure via npm start.
+ * Requirements:
+ *   - Node >= 18 (see package.json engines)
+ *   - Run `npm install` in db_visualizer before starting.
+ * Usage:
+ *   - Optionally source ./postgres.env created by startup.sh:
+ *       . ./postgres.env
+ *   - Start:
+ *       npm start
+ */
+const express = require('express'); // Ensure standard import path; no relative path to express internals
 const path = require('path');
 const fs = require('fs');
 
