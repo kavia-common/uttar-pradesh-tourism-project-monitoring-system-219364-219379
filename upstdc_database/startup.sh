@@ -172,3 +172,35 @@ echo "$(cat db_connection.txt)"
 echo ""
 echo "Readiness check example (should succeed):"
 echo "sudo -u postgres ${PG_BIN}/pg_isready -h ${PGHOST} -p ${PGPORT}"
+
+# Install and validate db_visualizer dependencies deterministically
+echo ""
+echo "Setting up db_visualizer (Node.js app)..."
+set -e
+pushd db_visualizer >/dev/null
+
+# Use npm ci if lockfile exists, otherwise fallback to npm install and generate a lockfile
+if [ -f package-lock.json ]; then
+  echo "Found package-lock.json - running npm ci..."
+  npm ci --no-audit --no-fund || { echo "[ERROR] npm ci failed - aborting startup"; exit 11; }
+else
+  echo "No package-lock.json found - running npm install to generate a lockfile..."
+  npm install --no-audit --no-fund || { echo "[ERROR] npm install failed - aborting startup"; exit 12; }
+fi
+
+# Basic sanity check: ensure express is installed
+if [ ! -d "node_modules/express" ]; then
+  echo "[WARN] Express not found in node_modules - installing explicitly..."
+  npm install express@^4.19.2 --no-audit --no-fund || { echo "[ERROR] Explicit express install failed"; exit 13; }
+fi
+
+# Log versions for debugging
+echo "Node version: $(node -v)"
+echo "NPM version: $(npm -v)"
+node -e "try{console.log('Express version:', require('express/package.json').version)}catch(e){console.error('Express not resolvable:', e.message); process.exit(14)}"
+
+popd >/dev/null
+set +e
+
+echo "db_visualizer dependencies installed successfully."
+echo "You can start it with: (cd db_visualizer && npm start)"

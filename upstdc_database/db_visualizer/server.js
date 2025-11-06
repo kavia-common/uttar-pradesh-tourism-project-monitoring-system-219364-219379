@@ -6,14 +6,15 @@
  * - Listens on process.env.PORT (default 3000). Use --host 0.0.0.0 for container exposure via npm start.
  * Requirements:
  *   - Node >= 18 (see package.json engines)
- *   - Run `npm install` in db_visualizer before starting.
+ *   - CommonJS module system (package.json "type":"commonjs"); do not set NODE_PATH or vendor express.
+ *   - Run `npm ci` (with lockfile) or `npm install` in db_visualizer before starting.
  * Usage:
  *   - Optionally source ./postgres.env created by startup.sh:
  *       . ./postgres.env
  *   - Start:
  *       npm start
  */
-const express = require('express'); // Ensure standard import path; no relative path to express internals
+const express = require('express'); // Ensure standard import path; no relative path to express internals or ./lib/express
 const path = require('path');
 const fs = require('fs');
 

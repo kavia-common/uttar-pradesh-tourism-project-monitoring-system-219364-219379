@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "Simple database viewer for PostgreSQL, MySQL, SQLite, and MongoDB",
   "main": "server.js",
+  "type": "commonjs",
   "scripts": {
     "start": "node server.js --host 0.0.0.0",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "postinstall": "node -e \"console.log('postinstall: ok')\""
   },
   "dependencies": {
     "express": "^4.19.2",
